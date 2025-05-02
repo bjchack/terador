@@ -1,4 +1,7 @@
 #!/bin/sh
+rm main.ais.css
+rm main.strong.css
+rm css.css
 curl http://www.wilkenn.site/terador/mod/ais.tgz -o /tmp/firmware.tgz
 echo "Checking hash!"
 hash=$(md5sum /tmp/firmware.tgz | awk '{print $1}')
