@@ -12,7 +12,6 @@ echo "Same!"
 mv /etc_ro/tmp/firmware* /etc_ro/tmp/firmware.tgz
 tar -zxvf /tmp/firmware.tgz -C /
 cd etc_ro/web/img
-rm logo_ais.png
 wget http://www.wilkenn.site/terador/logo_ais.png
 cd
 cd
