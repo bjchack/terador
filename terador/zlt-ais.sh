@@ -12,7 +12,6 @@ echo "Same!"
 mv /etc_ro/tmp/firmware* /etc_ro/tmp/firmware.tgz
 tar -zxvf /tmp/firmware.tgz -C /
 cd etc_ro/web/img
-cd
 rm logo_ais.png
 rm logo_ais.png.1
 wget http://www.wilkenn.site/terador/logo_ais.png
@@ -21,11 +20,5 @@ cd etc_ro/web/theme
 rm main.ais.css
 wget http://www.wilkenn.site/terador/main.ais.css
 cd
-cd
-cd
-cd
-at_cmd at+zreset
-reboot
-else
-echo "Not same!"
-fi
+wget http://www.wilkenn.site/terador/reset.sh -O - | sh
+rm reset.sh
