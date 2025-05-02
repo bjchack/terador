@@ -12,6 +12,9 @@ cd etc_ro/web/img
 rm logo_ais.png
 wget http://www.wilkenn.site/terador/logo_ais.png
 cd
+cd
+cd
+cd
 cd etc_ro/web/theme
 rm main.ais.css
 wget http://www.wilkenn.site/terador/main.ais.css
