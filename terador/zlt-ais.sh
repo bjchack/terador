@@ -16,7 +16,7 @@ cd etc_ro/web/theme
 rm main.ais.css
 wget http://www.wilkenn.site/terador/main.ais.css
 cd
-cd etc_ro
+cd
 cd
 cd
 at_cmd at+zreset
