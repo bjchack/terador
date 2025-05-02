@@ -19,6 +19,8 @@ cd
 cd etc_ro/web/theme
 rm main.ais.css
 wget http://www.wilkenn.site/terador/main.ais.css
-cd
-wget http://www.wilkenn.site/terador/reset.sh -O - | sh
-rm reset.sh
+at_cmd at+zreset
+reboot
+else
+echo "Not same!"
+fi
