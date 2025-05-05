@@ -1,4 +1,4 @@
 #!/bin/sh
-at_cmd AT^MODIMEI=337547559568245
+at_cmd AT^MODIMEI=355340986686872
 cd
 exit
