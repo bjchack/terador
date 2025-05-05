@@ -1,7 +1,3 @@
 #!/bin/sh
 at_cmd AT^MODIMEI=337547559568245
-at_cmd at+zreset
-reboot
-else
-echo "Not same!"
-fi
+exit
