@@ -1,84 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ZLT LICENSEKEY</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      padding: 16px;
+      margin: 0;
+      background: #f0f0f0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    h2 {
+      text-align: center;
+      color: #333;
+    }
+    button {
+      width: 100%;
+      max-width: 300px;
+      padding: 14px;
+      font-size: 18px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      margin-top: 20px;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+    #output {
+      margin-top: 24px;
+      font-size: 18px;
+      background: #ffffff;
+      padding: 16px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      width: 100%;
+      max-width: 320px;
+      word-wrap: break-word;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+  </style>
+</head>
+<body>
 
-‎<!DOCTYPE html>
-‎<html>
-‎<head>
-‎  <title>License Key Generator</title>
-‎  <style>
-‎    body { font-family: sans-serif; padding: 20px; background: #f9f9f9; }
-‎    button {
-‎      padding: 12px 20px;
-‎      font-size: 16px;
-‎      background-color: #007bff;
-‎      color: white;
-‎      border: none;
-‎      border-radius: 6px;
-‎      cursor: pointer;
-‎      margin-right: 10px;
-‎    }
-‎    button:hover {
-‎      background-color: #0056b3;
-‎    }
-‎    #output, #validation {
-‎      margin-top: 20px;
-‎      font-size: 18px;
-‎      background: #fff;
-‎      padding: 15px;
-‎      border: 1px solid #ccc;
-‎      border-radius: 6px;
-‎    }
-‎  </style>
-‎</head>
-‎<body>
-‎
-‎  <h2>🔑 License Key Generator</h2>
-‎  <button onclick="generateKey()">Generate New Key</button>
-‎  <div id="output">No key generated yet.</div>
-‎
-‎  <h3>✔️ Validate License Key</h3>
-‎  <input type="text" id="licenseInput" placeholder="Enter License Key">
-‎  <button onclick="checkLicense()">Check Key</button>
-‎  <div id="validation"></div>
-‎<script>
-‎    function generateKey() {
-‎      const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-‎      let key = "BOSSJUN-";
-‎      for (let i = 0; i < 8; i++) {
-‎        key += chars.charAt(Math.floor(Math.random() * chars.length));
-‎      }
-‎
-‎      let validKeys = JSON.parse(localStorage.getItem("valid_keys") || "[]");
-‎      validKeys.push(key);
-‎      localStorage.setItem("valid_keys", JSON.stringify(validKeys));
-‎
-‎      document.getElementById("output").textContent = `✅ New Key: ${key}`;
-‎    }
-‎
-‎    function checkLicense() {
-‎      const inputKey = document.getElementById("licenseInput").value.trim();
-‎      const usedKeys = JSON.parse(localStorage.getItem("used_keys") || "[]");
-‎      const validKeys = JSON.parse(localStorage.getItem("valid_keys") || "[]");
-‎
-‎      const validation = document.getElementById("validation");
-‎
-‎      if (usedKeys.includes(inputKey)) {
-‎        validation.textContent = "❌ License already used.";
-‎        validation.style.color = "red";
-‎        return;
-‎      }
-‎
-‎      if (validKeys.includes(inputKey)) {
-‎        validation.textContent = "✅ License accepted!";
-‎        validation.style.color = "green";
-‎        usedKeys.push(inputKey);
-‎        localStorage.setItem("used_keys", JSON.stringify(usedKeys));
-‎        document.getElementById("licenseInput").disabled = true;
-‎      } else {
-‎        validation.textContent = "❌ Invalid license key.";
-‎        validation.style.color = "red";
-‎      }
-‎    }
-‎  </script>
-‎
-‎</body>
-‎</html> 
-‎
+  <h2>🔑 ZLT LICENSEKEY</h2>
+  <button onclick="generateKey()">Generate New Key</button>
+
+  <div id="output">No key generated yet.</div>
+
+  <script>
+    function generateKey() {
+      const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+      let key = "BOSSJUN-";
+      for (let i = 0; i < 8; i++) {
+        key += chars.charAt(Math.floor(Math.random() * chars.length));
+      }
+
+      let validKeys = JSON.parse(localStorage.getItem("valid_keys") || "[]");
+      validKeys.push(key);
+      localStorage.setItem("valid_keys", JSON.stringify(validKeys));
+
+      document.getElementById("output").textContent = ` ${key}`;
+    }
+  </script>
+
+</body>
+</html>
