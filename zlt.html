@@ -1,72 +1,101 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ZLT LICENSEKEY</title>
+  <title>Boss Junjun Tools</title>
   <style>
     body {
-      font-family: sans-serif;
-      padding: 16px;
+      font-family: 'Segoe UI', sans-serif;
+      background: #f3f4f6;
+      color: #111827;
       margin: 0;
-      background: #f0f0f0;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
+      padding: 10px;
+      text-align: center;
+    }
+    .section {
+      background: white;
+      margin: 15px auto;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      max-width: 500px;
     }
     h2 {
-      text-align: center;
-      color: #333;
+      margin-top: 0;
     }
-    button {
-      width: 100%;
-      max-width: 300px;
-      padding: 14px;
-      font-size: 18px;
-      background-color: #007bff;
+    .button {
+      background-color: #2563eb;
       color: white;
+      padding: 12px;
+      margin: 10px 5px;
+      width: 90%;
+      max-width: 300px;
       border: none;
-      border-radius: 8px;
+      border-radius: 10px;
+      font-size: 16px;
+      display: block;
       cursor: pointer;
+      text-decoration: none;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .button.red { background-color: red; }
+    .button.green { background-color: green; }
+    .button.orange { background-color: orange; }
+    .button.black { background-color: black; }
+    .button.violet { background-color: violet; color: white; }
+    .imei-box {
+      font-size: 20px;
+      margin: 15px 0;
+      font-weight: bold;
+      word-break: break-all;
+    }
+    footer {
       margin-top: 20px;
-    }
-    button:hover {
-      background-color: #0056b3;
-    }
-    #output {
-      margin-top: 24px;
-      font-size: 18px;
-      background: #ffffff;
-      padding: 16px;
-      border: 1px solid #ccc;
-      border-radius: 8px;
-      width: 100%;
-      max-width: 320px;
-      word-wrap: break-word;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      font-size: 14px;
+      color: #6b7280;
     }
   </style>
 </head>
 <body>
 
-  <h2>🔑 ZLT LICENSEKEY</h2>
-  <button onclick="generateKey()">Generate New Key</button>
+  <div class="section">
+    <h2>IMEI Generator</h2>
+    <div id="imei" class="imei-box">Tap the button below</div>
+    <button class="button" onclick="generateIMEI()">Generate IMEI</button>
+  </div>
 
-  <div id="output">No key generated yet.</div>
+  <div class="section">
+    <h2>Bandlocking Tool</h2>
+    <p>Login first before clicking Bandlocking:</p>
+    <a class="button" href="http://192.168.254.254/goform/goform_set_cmd_process?isTest=false&amp;goformId=LOGIN&amp;username=dXNlcg%3D%3D&amp;password=QGwwM2UxdDM%3D">LOGIN</a>
+    <a class="button red" href="http://192.168.254.254/goform/goform_set_cmd_process?isTest=false&amp;goformId=LOGOUT&amp;username=dXNlcg%3D%3D&amp;password=QGwwM2UxdDM%3D">LOGOUT</a>
+    <a class="button green" href="http://192.168.254.254/goform/goform_set_cmd_process?isTest=false&amp;band_state=yes&amp;band_list=4%2C0%2C0%2C0%2C0%2C0%2C0%2C0&amp;wcdma_list=0%2C0%2C0&amp;tds_list=0%2C0&amp;zeact=1&amp;goformId=TZ_SET_LOCK_BAND">BAND 3</a>
+    <a class="button orange" href="http://192.168.254.254/goform/goform_set_cmd_process?isTest=false&amp;band_state=yes&amp;band_list=0%2C0%2C0%2C8%2C0%2C0%2C0%2C0&amp;wcdma_list=0%2C0%2C0&amp;tds_list=0%2C0&amp;zeact=0&amp;goformId=TZ_SET_LOCK_BAND">BAND 28</a>
+    <a class="button black" href="http://192.168.254.254/goform/goform_set_cmd_process?isTest=false&band_state=yes&band_list=0%2C0%2C0%2C0%2C128%2C0%2C0%2C0&wcdma_list=0%2C0%2C0&tds_list=0%2C0&zeact=0&goformId=TZ_SET_LOCK_BAND">BAND 40</a>
+    <a class="button violet" href="http://192.168.254.254/goform/goform_set_cmd_process?isTest=false&band_state=yes&band_list=0%2C0%2C0%2C0%2C0%2C1%2C0%2C0&wcdma_list=0%2C0%2C0&tds_list=0%2C0&zeact=0&goformId=TZ_SET_LOCK_BAND">BAND 41</a>
+  </div>
+
+  <footer>© Boss Junjun 2025</footer>
 
   <script>
-    function generateKey() {
-      const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-      let key = "BOSSJUN-";
-      for (let i = 0; i < 8; i++) {
-        key += chars.charAt(Math.floor(Math.random() * chars.length));
+    function generateIMEI() {
+      let imei = '';
+      for (let i = 0; i < 14; i++) {
+        imei += Math.floor(Math.random() * 10);
       }
-
-      let validKeys = JSON.parse(localStorage.getItem("valid_keys") || "[]");
-      validKeys.push(key);
-      localStorage.setItem("valid_keys", JSON.stringify(validKeys));
-
-      document.getElementById("output").textContent = ` ${key}`;
+      let sum = 0;
+      for (let i = 0; i < 14; i++) {
+        let digit = parseInt(imei[i]);
+        if (i % 2 === 1) digit *= 2;
+        if (digit > 9) digit -= 9;
+        sum += digit;
+      }
+      let checkDigit = (10 - (sum % 10)) % 10;
+      imei += checkDigit;
+      document.getElementById('imei').innerText = imei;
     }
   </script>
 
