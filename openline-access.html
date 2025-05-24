@@ -54,7 +54,7 @@
       }
 
       try {
-        const res = await fetch("https://api.github.com/repos/bjchack/license-store/contents/license.json");
+        const res = await fetch("https://raw.githubusercontent.com/bjchack/license-store/main/license.json");
         const data = await res.json();
         const content = atob(data.content); // decode base64
         const validKeys = JSON.parse(content);
