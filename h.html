@@ -1,1 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>License Generator + Checker</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+  <h3>Generate License</h3>
+  <input id="usernameInput" placeholder="Enter username (optional)" />
+  <button onclick="generateLicense()">Generate Key</button>
+  <div id="generatedKey"></div>
 
+  <hr />
+
+  <h3>Validate License</h3>
+  <input id="licenseInput" placeholder="Enter license key" />
+  <button onclick="checkLicense()">Check License</button>
+  <div id="message"></div>
+  <button id="mainButton" style="display:none;">OPENLINE</button>
+
+  <script src="license.js"></script>
+</body>
+</html>
