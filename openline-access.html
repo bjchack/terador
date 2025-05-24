@@ -79,7 +79,7 @@
       }
 
       try {
-        const response = await const url = `https://api.github.com/repos/bjchack/license-store/contents/license.json`;
+        const response = await const url = 'https://api.github.com/repos/bjchack/license-store/contents/license.json');
         const validKeys = await response.json();
 
         if (validKeys.includes(inputKey)) {
