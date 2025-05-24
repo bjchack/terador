@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Admin License Key Generator</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; max-width: 600px; margin: auto; background: #f0f0f0; }
+    input, button, textarea { width: 100%; padding: 12px; margin: 10px 0; font-size: 16px; }
+    button { background-color: #4caf50; color: white; border: none; cursor: pointer; border-radius: 6px; }
+    button:hover { background-color: #45a049; }
+    #output { background: white; padding: 10px; border-radius: 6px; word-break: break-word; }
+  </style>
+</head>
+<body>
+
+  <h2>Admin License Key Generator</h2>
+
+  <label for="githubToken">GitHub Token (classic PAT):</label>
+  <input id="githubToken" type="password" placeholder="Paste your GitHub token here" />
+
+  <label for="githubUser">GitHub Username:</label>
+  <input id="githubUser" placeholder="GitHub username" />
+
+  <label for="githubRepo">Repository Name:</label>
+  <input id="githubRepo" placeholder="Repo name" />
+
+  <label for="branchName">Branch Name (default: main):</label>
+  <input id="branchName" placeholder="Branch name" value="main" />
+
+  <label for="licensePath">Path to license.json:</label>
+  <input id="licensePath" placeholder="e.g. license.json or keys/license.json" value="license.json" />
+
+  <button onclick="generateAndSaveKey()">Generate & Save License Key</button>
+
+  <div id="output"></div>
+
+  <script>
+    function generateLicenseKey() {
+      const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+      let key = '';
+      for (let i = 0; i < 16; i++) {
+        if (i > 0 && i % 4 === 0) key += '-';
+        key += chars.charAt(Math.floor(Math.random() * chars.length));
+      }
+      return key;
+    }
+
+    async function generateAndSaveKey() {
+      const token = document.getElementById('githubToken').value.trim();
+      const user = document.getElementById('githubUser').value.trim();
+      const repo = document.getElementById('githubRepo').value.trim();
+      const branch = document.getElementById('branchName').value.trim() || 'main';
+      const path = document.getElementById('licensePath').value.trim() || 'license.json';
+
+      const output = document.getElementById('output');
+      output.textContent = '⏳ Processing...';
+
+      if (!token || !user || !repo || !branch || !path) {
+        output.textContent = '❌ Please fill all fields.';
+        return;
+      }
+
+      try {
+        // 1. Get current license.json content & SHA
+        const getUrl = `https://api.github.com/repos/${user}/${repo}/contents/${path}?ref=${branch}`;
+        const getRes = await fetch(getUrl, {
+          headers: { Authorization: 'token ' + token }
+        });
+
+        if (!getRes.ok) {
+          output.textContent = '❌ Failed to fetch license.json. Check repo/path/token.';
+          return;
+        }
+
+        const data = await getRes.json();
+        const fileContent = atob(data.content);
+        const sha = data.sha;
+
+        // 2. Parse JSON and add new key
+        const json = JSON.parse(fileContent);
+        if (!json.valid_keys) json.valid_keys = [];
+
+        const newKey = generateLicenseKey();
+        json.valid_keys.push(newKey);
+
+        // 3. Prepare updated content
+        const updatedContent = btoa(unescape(encodeURIComponent(JSON.stringify(json, null, 2))));
+
+        // 4. Update file with PUT request
+        const putRes = await fetch(getUrl, {
+          method: 'PUT',
+          headers: {
+            Authorization: 'token ' + token,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            message: `Add license key ${newKey}`,
+            content: updatedContent,
+            sha: sha,
+            branch: branch
+          })
+        });
+
+        if (!putRes.ok) {
+          output.textContent = '❌ Failed to update license.json.';
+          return;
+        }
+
+        output.innerHTML = `✅ License key generated and saved:<br><b>${newKey}</b>`;
+      } catch (error) {
+        output.textContent = '❌ Error: ' + error.message;
+      }
+    }
+  </script>
+</body>
+</html>
