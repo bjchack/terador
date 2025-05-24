@@ -24,3 +24,22 @@ function checkLicense() {
     message.textContent = "❌ Invalid license key.";
   }
 }
+function generateLicense() {
+  const username = document.getElementById("usernameInput").value.trim();
+  const charset = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+  let key = "";
+
+  for (let i = 0; i < 16; i++) {
+    if (i > 0 && i % 4 === 0) key += "-";
+    key += charset.charAt(Math.floor(Math.random() * charset.length));
+  }
+
+  const finalKey = username ? `${username.toUpperCase()}-${key}` : key;
+
+  document.getElementById("generatedKey").textContent = `🔐 ${finalKey}`;
+  
+  // Optional: add to localStorage valid_keys list
+  const validKeys = JSON.parse(localStorage.getItem("valid_keys") || "[]");
+  validKeys.push(finalKey);
+  localStorage.setItem("valid_keys", JSON.stringify(validKeys));
+}
