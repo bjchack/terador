@@ -1,67 +1,147 @@
-<!-- generator.html --><!DOCTYPE html><html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-  <title>License Key Generator</title>
   <meta charset="UTF-8">
+  <title>License Key App</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
-    body { font-family: Arial; padding: 20px; }
-    .key-box { margin-top: 20px; padding: 10px; border: 1px solid #ccc; width: fit-content; }
-  </style>
-</head>
-<body>
-  <h2>Generate License Key</h2>
-  <button onclick="generateKey()">Generate</button>
-  <div class="key-box" id="output"></div>  <script>
-    function generateKey() {
-      const prefix = "BOSSJUN";
-      const part1 = Math.random().toString(36).substring(2, 6).toUpperCase();
-      const part2 = Math.random().toString(36).substring(2, 6).toUpperCase();
-      const timestamp = Date.now();
-      const key = `${prefix}-${part1}-${part2}`;
-      const fullKey = btoa(JSON.stringify({ key, timestamp }));
-      document.getElementById("output").textContent = fullKey;
+    * { box-sizing: border-box; }
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #f2f2f2;
+      padding: 20px;
+      margin: 0;
     }
-  </script></body>
-</html><!-- validator.html --><!DOCTYPE html><html>
-<head>
-  <title>License Validator</title>
-  <meta charset="UTF-8">
-  <style>
-    body { font-family: Arial; padding: 20px; }
-    input { width: 300px; }
+
+    .container {
+      max-width: 500px;
+      margin: auto;
+      background: #fff;
+      padding: 20px;
+      border-radius: 15px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    h2 {
+      text-align: center;
+      color: #333;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      background: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      margin-top: 10px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    button:hover {
+      background: #45a049;
+    }
+
+    input, textarea {
+      width: 100%;
+      padding: 12px;
+      font-size: 15px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      margin-top: 10px;
+    }
+
+    .copy-btn {
+      background: #2196F3;
+      margin-top: 5px;
+    }
+
+    .result {
+      text-align: center;
+      font-weight: bold;
+      margin-top: 15px;
+    }
+
+    .valid { color: green; }
+    .invalid { color: red; }
+
+    @media (max-width: 600px) {
+      h2 { font-size: 20px; }
+    }
   </style>
 </head>
 <body>
-  <h2>Enter License Key</h2>
-  <input id="keyInput" placeholder="Paste license key here" />
-  <button onclick="validateKey()">Validate</button>
-  <div id="result" style="margin-top:10px;"></div>  <script>
+  <div class="container">
+    <h2>License Key Generator</h2>
+    <button onclick="generateKey()">Generate Key</button>
+    <textarea id="generatedKey" rows="2" readonly></textarea>
+    <button class="copy-btn" onclick="copyKey()">Copy Key</button>
+
+    <h2>License Key Validator</h2>
+    <input type="text" id="keyInput" placeholder="Enter license key">
+    <button onclick="validateKey()">Validate Key</button>
+    <p id="validationResult" class="result"></p>
+  </div>
+
+  <script>
+    const secret = "mySecretKey";
+
+    function generateKey() {
+      const now = new Date();
+      const dateStr = now.toISOString().split("T")[0];
+      const raw = `${secret}-${dateStr}-${Math.floor(Math.random() * 100000)}`;
+      const key = btoa(raw);
+      document.getElementById("generatedKey").value = key;
+    }
+
+    function copyKey() {
+      const keyField = document.getElementById("generatedKey");
+      keyField.select();
+      keyField.setSelectionRange(0, 99999); // For mobile
+      document.execCommand("copy");
+      alert("Key copied to clipboard!");
+    }
+
     function validateKey() {
-      const input = document.getElementById("keyInput").value;
-      const result = document.getElementById("result");
+      const key = document.getElementById("keyInput").value.trim();
+      const result = document.getElementById("validationResult");
 
       try {
-        const decoded = atob(input);
-        const { key, timestamp } = JSON.parse(decoded);
+        const decoded = atob(key);
+        const [sec, dateStr, rand] = decoded.split("-");
 
-        // Check if already used
-        if (localStorage.getItem(key)) {
-          result.textContent = "Invalid: Key already used.";
+        if (sec !== secret) {
+          result.textContent = "Invalid key (wrong secret)";
+          result.className = "result invalid";
           return;
         }
 
-        // Check if expired
-        const now = Date.now();
-        if (now - timestamp > 3600000) { // 1 hour in ms
-          result.textContent = "Invalid: Key expired.";
+        const today = new Date().toISOString().split("T")[0];
+        if (dateStr !== today) {
+          result.textContent = "Key expired.";
+          result.className = "result invalid";
           return;
         }
 
-        // Valid
-        localStorage.setItem(key, true);
-        result.textContent = "Valid Key: Access granted.";
+        const usedKeys = JSON.parse(localStorage.getItem("usedKeys") || "[]");
+        if (usedKeys.includes(key)) {
+          result.textContent = "Key already used.";
+          result.className = "result invalid";
+          return;
+        }
+
+        usedKeys.push(key);
+        localStorage.setItem("usedKeys", JSON.stringify(usedKeys));
+        result.textContent = "Key valid! Access granted.";
+        result.className = "result valid";
+
       } catch (e) {
         result.textContent = "Invalid key format.";
+        result.className = "result invalid";
       }
     }
-  </script></body>
+  </script>
+</body>
 </html>
