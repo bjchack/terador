@@ -24,8 +24,11 @@ function checkLicense() {
     message.textContent = "❌ Invalid license key.";
   }
 }
+
 function generateLicense() {
-  const username = document.getElementById("usernameInput").value.trim();
+  const usernameInput = document.getElementById("usernameInput");
+  const generatedDisplay = document.getElementById("generatedKey");
+  const username = usernameInput ? usernameInput.value.trim() : "";
   const charset = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
   let key = "";
 
@@ -36,9 +39,12 @@ function generateLicense() {
 
   const finalKey = username ? `${username.toUpperCase()}-${key}` : key;
 
-  document.getElementById("generatedKey").textContent = `🔐 ${finalKey}`;
-  
-  // Optional: add to localStorage valid_keys list
+  // Display generated key
+  if (generatedDisplay) {
+    generatedDisplay.textContent = `🔐 ${finalKey}`;
+  }
+
+  // Save to valid_keys
   const validKeys = JSON.parse(localStorage.getItem("valid_keys") || "[]");
   validKeys.push(finalKey);
   localStorage.setItem("valid_keys", JSON.stringify(validKeys));
