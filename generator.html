@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Password Generator</title>
+  <style>
+    body { font-family: sans-serif; padding: 20px; }
+    button { padding: 10px; margin-top: 10px; }
+    input { width: 100%; padding: 10px; margin-top: 10px; }
+  </style>
+</head>
+<body>
+  <h2>Generate One-Time Password</h2>
+  <input type="text" id="password" readonly />
+  <button onclick="generate()">Generate Password</button>
+  <button onclick="copy()">Copy to Clipboard</button>
+
+  <script>
+    function generate() {
+      const pass = Math.random().toString(36).substring(2, 10).toUpperCase();
+      document.getElementById('password').value = pass;
+
+      let passwords = JSON.parse(localStorage.getItem("valid_passwords") || "[]");
+      passwords.push(pass);
+      localStorage.setItem("valid_passwords", JSON.stringify(passwords));
+    }
+
+    function copy() {
+      const input = document.getElementById("password");
+      input.select();
+      input.setSelectionRange(0, 99999);
+      document.execCommand("copy");
+      alert("Copied: " + input.value);
+    }
+  </script>
+</body>
+</html>
