@@ -3,13 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Subscription Status</title>
+<title>Expiration</title>
 
 <style>
 body {
     margin: 0;
-    font-family: 'Segoe UI', sans-serif;
-    background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+    font-family: Arial, sans-serif;
+    background: #0f172a;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -17,54 +17,22 @@ body {
     color: #fff;
 }
 
-.container {
-    background: rgba(255,255,255,0.05);
-    backdrop-filter: blur(15px);
-    padding: 30px;
-    border-radius: 15px;
-    text-align: center;
-    width: 320px;
-    box-shadow: 0 0 25px rgba(0,0,0,0.4);
-}
-
-h1 {
-    margin-bottom: 10px;
-    color: #00ffcc;
-}
-
-.status {
-    font-size: 20px;
-    margin: 15px 0;
-}
-
-.expiry {
-    background: #ff9800;
-    padding: 10px;
+.box {
+    background: #1e293b;
+    padding: 25px 40px;
     border-radius: 10px;
-    color: #000;
-    font-weight: bold;
-    margin-top: 10px;
+    text-align: center;
+    box-shadow: 0 0 15px rgba(0,0,0,0.5);
 }
 
-.button {
-    margin-top: 20px;
-    padding: 12px;
-    border: none;
-    width: 100%;
-    border-radius: 8px;
-    background: #00ffcc;
-    color: #000;
+.exp {
+    font-size: 22px;
     font-weight: bold;
-    cursor: pointer;
-    transition: 0.3s;
-}
-
-.button:hover {
-    background: #00c9a7;
+    color: #38bdf8;
 }
 
 .footer {
-    margin-top: 20px;
+    margin-top: 15px;
     font-size: 12px;
     opacity: 0.6;
 }
@@ -74,20 +42,12 @@ h1 {
 
 <body>
 
-<div class="container">
-    <h1>✔ Active License</h1>
-    <div class="status">Your access is active</div>
-
-    <div class="expiry">
-        Expiration Date: FEB 2026
-    </div>
-
-    <button class="button" onclick="alert('License Verified!')">
-        Check Status
-    </button>
+<div class="box">
+    <div>Expiration Date</div>
+    <div class="exp">MAY 2 2026</div>
 
     <div class="footer">
-        © BJC ELOAD SYSTEM 2026
+        © BJC ELOAD
     </div>
 </div>
 
